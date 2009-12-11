@@ -123,7 +123,7 @@ Alcune note:
 L'applicazione in C# permette di impostare i seguenti parametri del mouse. La tabella descrive il comportamento del device alla ricezione di GetFeatureReport o SetFeatureReport.
 Essa è quindi l'interfaccia di comunicazione logica tra Host e Device.
 
-|| REPORT ID || PAYLOAD SIZE(Bytes) || ON GET FEATURE || ON SET FEATURE || DATA DETAILS ||
+|| *REPORT ID* || *SIZE(Bytes)* || *ON GET FEATURE* || *ON SET FEATURE* || *DATA DETAILS* ||
 || FID_OFFSET_XY || 4 || Returns Offsets X,Y || Sets Offsets X,Y || 2 INT16 ||
 || FID_RAW_XY || 4 || Returns Raw Values X,Y || - || 2 UINT16 ||
 || FID_WRITE_TO_EEPROM || 1 || - || Starts Write/Read to/from EEPROM || 1 BYTE (0x01 to Write, 0x00 to Read) ||
