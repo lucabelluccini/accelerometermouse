@@ -1,6 +1,6 @@
-#summary Descrizione delle Platform Invoke
+#summary Descrizione delle Platform Invoke in .NET
 
-= Platform Invoke =
+= Platform Invoke in .NET =
 
 Data una function call (definita nel nostro codice managed) e un unmanaged called site (la funzione che verrà chiamata), ogni parametro della prima verrà "marshaled" (convertita) in un qualcosa di equivalente della seconda.
 
