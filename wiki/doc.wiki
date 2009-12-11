@@ -70,7 +70,8 @@ I casi estranei ai due precedenti sono costituiti da Feature Report che hanno il
 Esempio:
 
 || HOST || || DEVICE ||
-|| SetFeatureReport(FID_WRITE_TO_EEPROM) || `---> [0x15][0x01] --->` || SetFeatureReport Handle Function: ||																		|| || || `[0x15] is FID_WRITE_TO_EEPROM` ||
+|| SetFeatureReport(FID_WRITE_TO_EEPROM) || `---> [0x15][0x01] --->` || SetFeatureReport Handle Function: ||
+|| || || `[0x15] is FID_WRITE_TO_EEPROM` ||
 || || || `[0x01] tells me to write parameters to EEprom` ||
 || GetFeatureReport(FID_GAIN_XY) || `---> [0x25][0x00][0x00][0x00][0x00] --->` || GetFeatureReport Handle Function: ||
 || || || `[0x25] is FID_GAIN_XY` ||
@@ -132,10 +133,14 @@ Essa è quindi l'interfaccia di comunicazione logica tra Host e Device.
 || *REPORT ID* || *SIZE(Bytes)* || *ON GET FEATURE* || *ON SET FEATURE* || *DATA DETAILS* ||
 || FID_OFFSET_XY || 4 || Returns Offsets X,Y || Sets Offsets X,Y || 2 INT16 ||
 || FID_RAW_XY || 4 || Returns Raw Values X,Y || - || 2 UINT16 ||
-|| FID_WRITE_TO_EEPROM || 1 || - || Starts Write/Read to/from EEPROM || 1 BYTE (0x01 to Write, 0x00 to Read) ||
-|| FID_KEYBOARD_SHAKEACTION || 3 || Returns Keyboard Action Keys || Sets Keyboard Action Keys || 1 BYTE + 2 BYTES (Keyboard Modifier + 2 Keys) ||
-|| FID_IS_CALIBRATING || 1 || - || Enable/Unable Mouse Calibration || 1 BYTE (0x01 to disable cursor movement) ||
-|| FID_MIRROR_XY || 1 || Returns Mirroring status || Enable/Unable X,Y Mirroring || 1 BYTE (Mirroring mask: MirrorX[Bit0],MirrorY[Bit1]) ||
+|| FID_WRITE_TO_EEPROM || 1 || - || Starts Write/Read to/from EEPROM || 1 BYTE ||
+|| || || || || (0x01 to Write, 0x00 to Read) ||
+|| FID_KEYBOARD_SHAKEACTION || 3 || Returns Keyboard Action Keys || Sets Keyboard Action Keys || 1 BYTE + 2 BYTES ||
+|| || || || || (Keyboard Modifier + 2 Keys) ||
+|| FID_IS_CALIBRATING || 1 || - || Enable/Unable Mouse Calibration || 1 BYTE ||
+|| || || || || (0x01 to disable cursor movement) ||
+|| FID_MIRROR_XY || 1 || Returns Mirroring status || Enable/Unable X,Y Mirroring || 1 BYTE ||
+|| || || || || (Mirroring mask: MirrorX[Bit0],MirrorY[Bit1]) ||
 || FID_SHAKES_WES || 2 || Returns size of Event Window in ms || Sets size of Event Window in ms || 1 UINT16 ||
 || FID_GAIN_XY || 4 || Returns Gain X,Y || Sets Gain X,Y || 2 UINT16 ||
 || FID_ROTATION_COEFF || 8 || Returns Rotation Coefficients || Set Rotation Coefficients || 4 INT16 ||
