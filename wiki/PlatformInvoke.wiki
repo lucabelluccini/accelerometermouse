@@ -29,4 +29,4 @@ Vengono trattati in modo particolare e verrà effettuato marshalling in modo aut
   * se sono valori di ritorno, viene creata una nuova istanza della classe SafeHandle e il valore dell'handle è settata con il valore dell'IntPtr
   * se il passaggio è by-ref, il valore in uscita è ignorato e il valore di ritorno sarà inglobato in un SafeHandle
   * se fa parte di una struttura, il SafeHandle viene passato
-Questa feature è stata utilizzate pesantemente nel codice del progetto.
+Questa feature è stata utilizzata pesantemente nel codice del progetto.
