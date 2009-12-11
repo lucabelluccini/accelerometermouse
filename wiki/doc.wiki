@@ -1,10 +1,14 @@
-Documentazione del progetto. Lingua Italiana.
+Documentazione del progetto.
 
-= THE_TOPO - Documentazione =
-Politecnico di Torino
-A.A. 2009/2010 - Programmazione di Sistema
+= THE_TOPO =
+
+Progetto sviluppato per il corso di Programmazione di Sistema al Politecnico di Torino nell'A.A. 2009/2010.
 Docente: Malnati Giovanni
-Gruppo 18: Allario Marco, Belluccini Luca, Cancedda Stefano, Ferraro Andrea
+Gruppo 18:
+  * Allario Marco
+  * Belluccini Luca
+  * Cancedda Stefano
+  * Ferraro Andrea
 
 == Hardware e firmware ==
 
