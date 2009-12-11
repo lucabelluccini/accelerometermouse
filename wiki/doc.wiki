@@ -140,7 +140,7 @@ Essa è quindi l'interfaccia di comunicazione logica tra Host e Device.
 || FID_IS_CALIBRATING || 1 || - || Enable/Unable Mouse Calibration || 1 BYTE ||
 || || || || || (0x01 to disable cursor movement) ||
 || FID_MIRROR_XY || 1 || Returns Mirroring status || Enable/Unable X,Y Mirroring || 1 BYTE ||
-|| || || || || (Mirroring mask: MirrorX[Bit0],MirrorY[Bit1]) ||
+|| || || || || (Bit0:MirrorX,Bit1:MirrorY) ||
 || FID_SHAKES_WES || 2 || Returns size of Event Window in ms || Sets size of Event Window in ms || 1 UINT16 ||
 || FID_GAIN_XY || 4 || Returns Gain X,Y || Sets Gain X,Y || 2 UINT16 ||
 || FID_ROTATION_COEFF || 8 || Returns Rotation Coefficients || Set Rotation Coefficients || 4 INT16 ||
