@@ -86,32 +86,32 @@ Esclusa la parte di inizializzazione dell'USB, che è standard e già gestita da
 Il main loop può essere diviso logicamente nelle seguenti fasi:
 {{{
 // Loop
-	// Check di flag che impone di scrivere i parametri correnti sulla EEprom (esso viene settato da una SetFeature FID_WRITE_TO_EEPROM con parametro 0x01 e inibito)
-	// Check di flag che impone di leggere i parametri correnti sulla EEprom (esso viene settato da una SetFeature FID_WRITE_TO_EEPROM con parametro 0x00 e inibito)
+ // Check di flag che impone di scrivere i parametri correnti sulla EEprom (esso viene settato da una SetFeature FID_WRITE_TO_EEPROM con parametro 0x01 e inibito)
+ // Check di flag che impone di leggere i parametri correnti sulla EEprom (esso viene settato da una SetFeature FID_WRITE_TO_EEPROM con parametro 0x00 e inibito)
 	
-	// Lettura dall'accelerometro della X e della Y via I2C
+ // Lettura dall'accelerometro della X e della Y via I2C
 		
-		// Filtro (media tra vecchi e nuovi valori di X e Y)
-		// Calcolo di X e Y come distanza da un punto centrale di riferimento e corretto da offset (impostato da eventuali SetFeature FID_OFFSET_XY) e scalato di 64
-		// Check per individuare uno shake: viene calcolato il modulo del vettore X^2 + Y^2 (non corretto da offset), chiamato "violence"
-			// Se "violence" supera una certa soglia, viene incrementato il contatore di Shake e se è il primo Shake rilevato, viene settato un timer bindato a una ISR
+  // Filtro (media tra vecchi e nuovi valori di X e Y)
+  // Calcolo di X e Y come distanza da un punto centrale di riferimento e corretto da offset (impostato da eventuali SetFeature FID_OFFSET_XY) e scalato di 64
+  // Check per individuare uno shake: viene calcolato il modulo del vettore X^2 + Y^2 (non corretto da offset), chiamato "violence"
+   // Se "violence" supera una certa soglia, viene incrementato il contatore di Shake e se è il primo Shake rilevato, viene settato un timer bindato a una ISR
 
-		// I valori X e Y vengono scalati del gain (ricevuto da eventuali SetFeatureReport FID_GAIN_XY)
-		// I valori X e Y possono essere specchiati a seconda di due flag (ricevuti da eventuali SetFeatureReport FID_MIRROR_XY)
-		// I valori X e Y vengono ruotati sulla base di una matrice di rotazione (ricevuta da eventuali SetFeatureReport FID_ROTATION_COEFF)
+  // I valori X e Y vengono scalati del gain (ricevuto da eventuali SetFeatureReport FID_GAIN_XY)
+  // I valori X e Y possono essere specchiati a seconda di due flag (ricevuti da eventuali SetFeatureReport FID_MIRROR_XY)
+  // I valori X e Y vengono ruotati sulla base di una matrice di rotazione (ricevuta da eventuali SetFeatureReport FID_ROTATION_COEFF)
 
-	// Se l'ultima trasmissione è andata a buon fine
+ // Se l'ultima trasmissione è andata a buon fine
 	
-		// Check dei pulsanti: Middle (Left e Right premuti insieme)
-		// Check del pulsante Left
-		// Check del pulsante Right
+  // Check dei pulsanti: Middle (Left e Right premuti insieme)
+  // Check del pulsante Left
+  // Check del pulsante Right
 
-		// Se la ISR riferita allo shake ha settato un flag "isShaked"
-			// Preparare l'invio di un Report Keyboard contenente la pressione di tasti programmabili via SetFeatureReport FID_KEYBOARD_SHAKEACTION
-			// Preparare il successivo invio di un Report Keyboard con tasti non premuti
-			// Inviare il primo Report: all'iterazione successiva verrà inviato il secondo e ripristinato il flag "isShaked"
-		// Altrimenti
-			// Invia il Report Mouse con i dati ottenuti precedentemente
+  // Se la ISR riferita allo shake ha settato un flag "isShaked"
+   // Preparare l'invio di un Report Keyboard contenente la pressione di tasti programmabili via SetFeatureReport FID_KEYBOARD_SHAKEACTION
+   // Preparare il successivo invio di un Report Keyboard con tasti non premuti
+   // Inviare il primo Report: all'iterazione successiva verrà inviato il secondo e ripristinato il flag "isShaked"
+  // Altrimenti
+   // Invia il Report Mouse con i dati ottenuti precedentemente
 }}}
 
 L'ISR dello shake non fa altro che controllare lo Shake counter: se supera una certa soglia (pari a 4), viene settata la variabile "isShaked" e resettato il contatore.
