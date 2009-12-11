@@ -26,23 +26,23 @@ Infatti, al momento della connessione e dell'enumerazione, il device verrà rile
 Nel descrittore, esse possono essere riassunte in 3 blocchi:
   * HID Input Device
 {{{
-	Usage Page (Vendor Defined Page 1)
-	 Usage (Vendor Usage 1)
-	 Collection (Application)
-	  {
-	   Report ID FID_WRITE_TO_EEPROM
-	   Usage (Vendor Usage 1)
-	   ... /* descrizione delle dimensione e del tipo di dati del report */ ...
-	   Feature Report
-	  }
-	  {
-	   Report ID FID_GAIN_XY
-	   Usage (Vendor Usage 1)
-	   ... /* descrizione delle dimensione e del tipo di dati del report */ ...
-	   Feature Report
-	  }
-	  ... /* Uno per ogni Feature Report */ ...
-	 End Collection (Application)
+Usage Page (Vendor Defined Page 1)
+ Usage (Vendor Usage 1)
+ Collection (Application)
+  {
+   Report ID FID_WRITE_TO_EEPROM
+   Usage (Vendor Usage 1)
+   ... /* descrizione delle dimensione e del tipo di dati del report */ ...
+   Feature Report
+  }
+  {
+   Report ID FID_GAIN_XY
+   Usage (Vendor Usage 1)
+   ... /* descrizione delle dimensione e del tipo di dati del report */ ...
+   Feature Report
+  }
+  ... /* Uno per ogni Feature Report */ ...
+ End Collection (Application)
 }}}
   * Mouse
 {{{
