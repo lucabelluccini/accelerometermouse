@@ -73,10 +73,10 @@ Esempio:
 || SetFeatureReport(FID_WRITE_TO_EEPROM) || `---> [0x15][0x01] --->` || SetFeatureReport Handle Function:																																`[0x15] is FID_WRITE_TO_EEPROM` ||
 || || || || `[0x01] tells me to write parameters to EEprom` ||
 || GetFeatureReport(FID_GAIN_XY) || `---> [0x25][0x00][0x00][0x00][0x00] --->` || GetFeatureReport Handle Function: `[0x25] is FID_GAIN_XY` ||
-|| || || || `[0x??] = GAIN X MSB` ||
-|| || || || `[0x??] = GAIN X LSB` ||
-|| || || || `[0x??] = GAIN Y MSB` ||
-|| || || || `[0x??] = GAIN Y LSB` ||
+|| || || `[0x??] = GAIN X MSB` ||
+|| || || `[0x??] = GAIN X LSB` ||
+|| || || `[0x??] = GAIN Y MSB` ||
+|| || || `[0x??] = GAIN Y LSB` ||
 || || `<--- [0x25][0xXY][0xWK][0xJH][0xVQ] <---` || ||
 
 Passando al punto di vista logico del funzionamento del firmware, abbiamo un main loop preceduto da una fase di inizializzazione.
