@@ -1,3 +1,5 @@
+Documentazione del progetto. Lingua Italiana.
+
 = THE_TOPO - Documentazione =
 Politecnico di Torino
 A.A. 2009/2010 - Programmazione di Sistema
@@ -62,9 +64,9 @@ I casi estranei ai due precedenti sono costituiti da Feature Report che hanno il
 Esempio:
 
 || HOST || || DEVICE ||
-|| SetFeatureReport(FID_WRITE_TO_EEPROM) || ---> [0x15][0x01] ---> || SetFeatureReport Handle Function:																																[0x15] is FID_WRITE_TO_EEPROM																					[0x01] tells me to write parameters to EEprom ||
-|| GetFeatureReport(FID_GAIN_XY) || ---> [0x25][0x00][0x00][0x00][0x00] ---> || GetFeatureReport Handle Function:																				[0x25] is FID_GAIN_XY																					[0x??] = GAIN X MSB																					[0x??] = GAIN X LSB																					[0x??] = GAIN Y MSB																					[0x??] = GAIN Y LSB ||
-|| || <--- [0x25][0x??][0x??][0x??][0x??] <--- || ||
+|| SetFeatureReport(FID_WRITE_TO_EEPROM) || `---> [0x15][0x01] --->` || SetFeatureReport Handle Function:																																`[0x15] is FID_WRITE_TO_EEPROM`																				`[0x01] tells me to write parameters to EEprom` ||
+|| GetFeatureReport(FID_GAIN_XY) || `---> [0x25][0x00][0x00][0x00][0x00] --->` || GetFeatureReport Handle Function:																				`[0x25] is FID_GAIN_XY`																				`[0x??] = GAIN X MSB`																					`[0x??] = GAIN X LSB`																					`[0x??] = GAIN Y MSB`																					`[0x??] = GAIN Y LSB` ||
+|| || `<--- [0x25][0x??][0x??][0x??][0x??] <---` || ||
 
 Passando al punto di vista logico del funzionamento del firmware, abbiamo un main loop di funzionamento preceduto da una fase di inizializzazione.
 Esclusa la parte di inizializzazione dell'USB, che è standard e già gestita dal codice fornito dalla Microchip, l'inizializzaizone specifica nel nostro caso è costituita dal settaggio di alcune variabili a valori predefiniti e il caricamento (o prima scrittura utilizzando valori di default) dei parametri di funzionamento del mouse dalla EEprom.
