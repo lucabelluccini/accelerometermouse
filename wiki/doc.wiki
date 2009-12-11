@@ -153,5 +153,5 @@ La prima fase è stata quella di costruire un wrapper alla "Hid.dll", in modo da
 internal static extern Boolean HidD_GetFeature( SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength );        
 }}}
 
-Il wrapper è stato costruito sfruttando la P/Invoke (Platform Invoke), che consente di eseguire codice non managed (il codice della libreria) in un contesto managed (la nostra applicazione in .NET). Un approfondimento è disponibile nell'appendice A.
+Il wrapper è stato costruito sfruttando la P/Invoke ([Platform/Invoke]), che consente di eseguire codice non managed (il codice della libreria) in un contesto managed (la nostra applicazione in .NET). Un approfondimento è disponibile nell'appendice A.
 Una volta ottenute tutte le chiamate necessarie per interagire con le periferiche USB HID, è stato possibile procedere con la comunicazione vera e propria.
