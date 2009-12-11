@@ -1,0 +1,169 @@
+Documentazione del progetto. Lingua Italiana.
+
+= THE_TOPO - Documentazione =
+Politecnico di Torino
+A.A. 2009/2010 - Programmazione di Sistema
+Docente: Malnati Giovanni
+Gruppo 18: Allario Marco, Belluccini Luca, Cancedda Stefano, Ferraro Andrea
+
+== Hardware e firmware ==
+
+Il progetto iniziale del mouse è stato modificato aggiungendo un pulsante su una delle porte disponibili (RC1).
+Per lo sviluppo del firmware si è partiti dallo scheletro di un firmware demo di un mouse avente funzionalità minimali.
+Durante lo sviluppo il descrittore della periferica è stato modificato più volte.
+Il file "usb_descriptors.c" contiene il device descriptor, configuration descriptor (interface, hid e endpoint descriptors).
+Infine c'è l'HID Report descriptor. L'HID Report Descriptor è passato da essere un descrittore standard di un mouse USB a report composito.
+Infatti, al momento della connessione e dell'enumerazione, il device verrà rilevato come 3 periferiche distinte:
+  * HID Input Device
+  * Mouse
+  * Keyboard
+Nel descrittore, esse possono essere riassunte in 3 blocchi:
+  * HID Input Device
+{{{
+	Usage Page (Vendor Defined Page 1)
+	 Usage (Vendor Usage 1)
+	 Collection (Application)
+	  {
+	   Report ID FID_WRITE_TO_EEPROM
+	   Usage (Vendor Usage 1)
+	   ... /* descrizione delle dimensione e del tipo di dati del report */ ...
+	   Feature Report
+	  }
+	  {
+	   Report ID FID_GAIN_XY
+	   Usage (Vendor Usage 1)
+	   ... /* descrizione delle dimensione e del tipo di dati del report */ ...
+	   Feature Report
+	  }
+	  ... /* Uno per ogni Feature Report */ ...
+	 End Collection (Application)
+}}}
+  * Mouse
+{{{
+	Usage Page (Generic Desktop)
+	 Usage (Mouse)
+	 Collection (Application)
+	  Report ID Mouse
+	  ... /* Descrittore standard di un mouse USB */ ...
+	 End Collection (Application)
+}}}
+  * Keyboard
+{{{
+	Usage Page (Generic Desktop)
+	 Usage (Keyboard)
+	 Collection (Application)
+	  Report ID Keyboard
+	  ... /* Descrittore standard di una keyboard USB */ ...
+	 End Collection (Application)
+}}}
+
+In tal modo, ad ogni invio o ricezione di input, output o feature report, sarà necessario specificare nel primo Byte l'ID del report che stiamo comunicando.
+Nel caso l'Host necessiti di un dato da parte del mouse dovrà richiedere un Input Report con ID Mouse (0x01).
+Nel caso il device voglia comportarsi da tastiera, invierà un Input Report con ID Keyboard (0x02).
+I casi estranei ai due precedenti sono costituiti da Feature Report che hanno il primo Byte corrispondente alla Feature impostata dall'Host (Set) o richiesta dall'Host (Get).
+Esempio:
+
+|| HOST || || DEVICE ||
+|| SetFeatureReport(FID_WRITE_TO_EEPROM) || `---> [0x15][0x01] --->` || SetFeatureReport Handle Function:																																`[0x15] is FID_WRITE_TO_EEPROM`; `[0x01] tells me to write parameters to EEprom` ||
+|| GetFeatureReport(FID_GAIN_XY) || `---> [0x25][0x00][0x00][0x00][0x00] --->` || GetFeatureReport Handle Function: `[0x25] is FID_GAIN_XY`; `[0x??] = GAIN X MSB`; `[0x??] = GAIN X LSB`; `[0x??] = GAIN Y MSB`; `[0x??] = GAIN Y LSB` ||
+|| || `<--- [0x25][0x??][0x??][0x??][0x??] <---` || ||
+
+Passando al punto di vista logico del funzionamento del firmware, abbiamo un main loop preceduto da una fase di inizializzazione.
+Esclusa la parte di inizializzazione dell'USB, che è standard e già gestita dal codice fornito dalla Microchip, l'inizializzaizone specifica nel nostro caso è costituita dal settaggio di alcune variabili a valori predefiniti e il caricamento (o prima scrittura utilizzando valori di default) dei parametri di funzionamento del mouse dalla EEprom.
+Il main loop può essere diviso logicamente nelle seguenti fasi:
+{{{
+// Loop
+	// Check di flag che impone di scrivere i parametri correnti sulla EEprom (esso viene settato da una SetFeature FID_WRITE_TO_EEPROM con parametro 0x01 e inibito)
+	// Check di flag che impone di leggere i parametri correnti sulla EEprom (esso viene settato da una SetFeature FID_WRITE_TO_EEPROM con parametro 0x00 e inibito)
+	
+	// Lettura dall'accelerometro della X e della Y via I2C
+		
+		// Filtro (media tra vecchi e nuovi valori di X e Y)
+		// Calcolo di X e Y come distanza da un punto centrale di riferimento e corretto da offset (impostato da eventuali SetFeature FID_OFFSET_XY) e scalato di 64
+		// Check per individuare uno shake: viene calcolato il modulo del vettore X^2 + Y^2 (non corretto da offset), chiamato "violence"
+			// Se "violence" supera una certa soglia, viene incrementato il contatore di Shake e se è il primo Shake rilevato, viene settato un timer bindato a una ISR
+
+		// I valori X e Y vengono scalati del gain (ricevuto da eventuali SetFeatureReport FID_GAIN_XY)
+		// I valori X e Y possono essere specchiati a seconda di due flag (ricevuti da eventuali SetFeatureReport FID_MIRROR_XY)
+		// I valori X e Y vengono ruotati sulla base di una matrice di rotazione (ricevuta da eventuali SetFeatureReport FID_ROTATION_COEFF)
+
+	// Se l'ultima trasmissione è andata a buon fine
+	
+		// Check dei pulsanti: Middle (Left e Right premuti insieme)
+		// Check del pulsante Left
+		// Check del pulsante Right
+
+		// Se la ISR riferita allo shake ha settato un flag "isShaked"
+			// Preparare l'invio di un Report Keyboard contenente la pressione di tasti programmabili via SetFeatureReport FID_KEYBOARD_SHAKEACTION
+			// Preparare il successivo invio di un Report Keyboard con tasti non premuti
+			// Inviare il primo Report: all'iterazione successiva verrà inviato il secondo e ripristinato il flag "isShaked"
+		// Altrimenti
+			// Invia il Report Mouse con i dati ottenuti precedentemente
+}}}
+
+L'ISR dello shake non fa altro che controllare lo Shake counter: se supera una certa soglia (pari a 4), viene settata la variabile "isShaked" e resettato il contatore.
+Il valore 4 è stato scelto in modo da farlo corrispondere ad un movimento in avanti ed indietro ripetuto 2 volte (uno shake).
+
+Alcune note:
+  * gli switch hanno un sistema di debouncing addizionale in software (un delay di alcuni ms)
+  * i valori di guadagno, rotazione sono implementati usando valori interi, arrotondando alla seconda cifra decimale (vengono inviati moltiplicati per 100, utilizzati e il risultato diviso per 100)
+  * gli algoritmi di comunicazione I2C sono spiegati nel dettaglio nel file "Accelerometer.h"
+  * la scrittura e lettura su EEprom è stata effettuata utilizzando funzioni già disponibili nel framework della Microchip
+  * è possibile capire se è necessario scrivere per la prima volta la EEprom testando una cella di memoria della EEprom: ad ogni re-flashing l'area della EEprom (a meno di contenuti statici impostabili con #pragma ROM ...) viene livellata ad un contenuto di default (0xFF)
+  * non è stato possibile implementare un movimento assoluto del mouse per problemi di mapping con lo schermo
+
+== Applicazione di calibrazione in C# ==
+
+L'applicazione in C# permette di impostare i seguenti parametri del mouse. La tabella descrive il comportamento del device alla ricezione di GetFeatureReport o SetFeatureReport.
+Essa è quindi l'interfaccia di comunicazione logica tra Host e Device.
+
+|| REPORT ID || PAYLOAD SIZE(Bytes) || ON GET FEATURE || ON SET FEATURE || DATA DETAILS ||
+|| FID_OFFSET_XY || 4 || Returns Offsets X,Y || Sets Offsets X,Y || 2 INT16 ||
+|| FID_RAW_XY || 4 || Returns Raw Values X,Y || - || 2 UINT16 ||
+|| FID_WRITE_TO_EEPROM || 1 || - || Starts Write/Read to/from EEPROM || 1 BYTE (0x01 to Write, 0x00 to Read) ||
+|| FID_KEYBOARD_SHAKEACTION || 3 || Returns Keyboard Action Keys || Sets Keyboard Action Keys || 1 BYTE + 2 BYTES (Keyboard Modifier + 2 Keys) ||
+|| FID_IS_CALIBRATING || 1 || - || Enable/Unable Mouse Calibration || 1 BYTE (0x01 to disable cursor movement) ||
+|| FID_MIRROR_XY || 1 || Returns Mirroring status || Enable/Unable X,Y Mirroring || 1 BYTE (Mirroring mask: MirrorX[Bit0],MirrorY[Bit1]) ||
+|| FID_SHAKES_WES || 2 || Returns size of Event Window in ms || Sets size of Event Window in ms || 1 UINT16 ||
+|| FID_GAIN_XY || 4 || Returns Gain X,Y || Sets Gain X,Y || 2 UINT16 ||
+|| FID_ROTATION_COEFF || 8 || Returns Rotation Coefficients || Set Rotation Coefficients || 4 INT16 ||
+|| FID_PIVOT_XY || 4 || Returns Pivot X,Y || Sets Pivot X,Y || 2 UINT16 ||
+
+La prima fase è stata quella di costruire un wrapper alla "Hid.dll", in modo da avere disponibili chiamate come:
+{{{
+[ DllImport( "hid.dll", SetLastError=true ) ]
+internal static extern Boolean HidD_GetFeature( SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength );        
+}}}
+
+Il wrapper è stato costruito sfruttando la P/Invoke (Platform Invoke), che consente di eseguire codice non managed (il codice della libreria) in un contesto managed (la nostra applicazione in .NET). Un approfondimento è disponibile nell'appendice A.
+Una volta ottenute tutte le chiamate necessarie per interagire con le periferiche USB HID, è stato possibile procedere con la comunicazione vera e propria.
+
+== Appendice A: Platform Invoke in C# ==
+Data una function call (definita nel nostro codice managed) e un unmanaged called site (la funzione che verrà chiamata), ogni parametro della prima verrà "marshaled" (convertita) in un qualcosa di equivalente della seconda.
+
+http://i.msdn.microsoft.com/0h9e9t7d.pinvoke(en-us,VS.71).gif
+
+I dati marshaled vengono messi nel runtime stack e la funzione unmanaged viene invocata.
+Il marshaling può essere complesso o trasparente a seconda dei casi.
+Per tipi di dato semplice (come interi, floating point, Byte, ...), il marshaling è un blitting (copia Byte a Byte).
+Il marshaling può essere evitato, come nei casi in cui è necessario passare strutture dati by reference al codice unmanaged (viene passato un puntatore a tale struttura). E' possibile ottenere maggior controllo sul marshaling, attraverso scelte esplicite sulla conversione.
+Il comportamento di default del marshaling è controllato mediante DllImport e attributi MarshalAs.
+Le stringhe introducono maggiore complessità a causa dei diversi tipi di formato. La runtime usa UTF-16 e dovranno essere marshaled in forma adatte alle chiamate (ANSI, UTF-8, ...).
+Nel caso di costanti ed enumerazioni, è necessario ridefinirle mediante una enumerazione C# o costanti statiche in una classe.
+
+Ci sono due differenze tra l'uso di Classi e Strutture per il passaggio dei parametri.
+  # Le strutture non necessitano di essere allocate sullo Heap, ma possono essere allcoate nello stack
+  # Le strutture sono impostate come LayoutKind.Sequential di default: in questo modo le dichiarazioni non necessitano di alcun attributo aggiuntivo per essere utilizzate con codice unmanaged
+Queste differenze permettono alle strutture di essere passate by-value a funzioni unmanaged, al contrario delle Classi.
+Inoltre, se la struttura è allocata sullo stack e la struttura contiene solo tipi blittabili, se viene passata una struttura al codice unmanaged by-reference, la struttura verrà passata direttamente al codice unmanaged senza copie intermedie. Cio significa che non sarà necessario specificare l'attributo Out per far effettuare modifiche al codice unmanaged.
+Non appena la struttura contiene dati non blittabili, questa ottimizzazione non è più effettuabile.
+
+In .NET 2.0 è stato introdotto un nuovo meccanismo per wrappare handle unmanaged.
+Tale wrapper è la classe SafeHandle. Gli oggetti SafeHandle incapsulano un handle sottoforma di un IntPtr, ma esponendolo come SafeFileHandle o SafeWaitHandle, lo sviluppatore ha un guadagno in termini di type safety.
+I SafeHandle inoltre impediscono di far riciclare gli handle.
+Vengono trattati in modo particolare e verrà effettuato marshalling in modo automatico quando usati in chiamate P/Invoke. A seconda dell'utilizzo:
+  * se sono parametri in uscita, il SafeHandle viene passato
+  * se sono valori di ritorno, viene creata una nuova istanza della classe SafeHandle e il valore dell'handle è settata con il valore dell'IntPtr
+  * se il passaggio è by-ref, il valore in uscita è ignorato e il valore di ritorno sarà inglobato in un SafeHandle
+  * se fa parte di una struttura, il SafeHandle viene passato
+Questa feature è stata utilizzate pesantemente nel codice del progetto.
