@@ -46,21 +46,21 @@ Usage Page (Vendor Defined Page 1)
 }}}
   * Mouse
 {{{
-	Usage Page (Generic Desktop)
-	 Usage (Mouse)
-	 Collection (Application)
-	  Report ID Mouse
-	  ... /* Descrittore standard di un mouse USB */ ...
-	 End Collection (Application)
+Usage Page (Generic Desktop)
+ Usage (Mouse)
+ Collection (Application)
+  Report ID Mouse
+  ... /* Descrittore standard di un mouse USB */ ...
+ End Collection (Application)
 }}}
   * Keyboard
 {{{
-	Usage Page (Generic Desktop)
-	 Usage (Keyboard)
-	 Collection (Application)
-	  Report ID Keyboard
-	  ... /* Descrittore standard di una keyboard USB */ ...
-	 End Collection (Application)
+Usage Page (Generic Desktop)
+ Usage (Keyboard)
+ Collection (Application)
+  Report ID Keyboard
+  ... /* Descrittore standard di una keyboard USB */ ...
+ End Collection (Application)
 }}}
 
 In tal modo, ad ogni invio o ricezione di input, output o feature report, sarà necessario specificare nel primo Byte l'ID del report che stiamo comunicando.
