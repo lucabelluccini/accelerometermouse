@@ -3,7 +3,9 @@ Documentazione del progetto.
 = THE_TOPO =
 
 Progetto sviluppato per il corso di Programmazione di Sistema al Politecnico di Torino nell'A.A. 2009/2010.
+
 Docente: Malnati Giovanni
+
 Gruppo 18:
   * Allario Marco
   * Belluccini Luca
