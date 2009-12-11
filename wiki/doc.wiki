@@ -1,4 +1,4 @@
-#summary Documentazione del progetto.
+#summary Documentazione del progetto
 
 = THE_TOPO =
 
