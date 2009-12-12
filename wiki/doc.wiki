@@ -153,5 +153,21 @@ La prima fase è stata quella di costruire un wrapper alla "Hid.dll", in modo da
 internal static extern Boolean HidD_GetFeature( SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength );        
 }}}
 
-Il wrapper è stato costruito sfruttando la P/Invoke ([PlatformInvoke]), che consente di eseguire codice non managed (il codice della libreria) in un contesto managed (la nostra applicazione in .NET). Un approfondimento è disponibile nell'appendice A.
+Il wrapper è stato costruito sfruttando la P/Invoke ([PlatformInvoke]), che consente di eseguire codice non managed (il codice della libreria di sistema che fornisce interazione con periferiche HID) in un contesto managed (la nostra applicazione in .NET). Un approfondimento è disponibile nell'appendice A.
 Una volta ottenute tutte le chiamate necessarie per interagire con le periferiche USB HID, è stato possibile procedere con la comunicazione vera e propria.
+
+L'applicazione ha una schermata iniziale che auto-rileva la presenza del device sulla base del Product ID e Vendor ID.
+Se il dispositivo viene rilevato, è possibile accedere ad una finestra di configurazione.
+La configurazione consiste nel poter impostare parametri quali:
+  * Rotazione del mouse rispetto all'asse Z
+  * Inclinazione del mouse rispetto all'asse X e Y
+  * "Sensibilità" o guadagno del mouse
+  * Lo shortcut da tastiera che deve essere scatenato al momento in cui avviene uno shake
+
+Per quanto riguarda l'inclinazione del mouse rispetto all'asse X e Y, è possibile far eseguire una sorta di auto-taratura.
+Un pulsante permette di accedere ad una notifica di pre-calibrazione: alla pressione del tasto 'OK' il movimento del cursore verrà inibito e l'utente deve posizionare il mouse nel modo in cui vuole utilizzarlo.
+Dopo 2 secondi tale posizione viene campionata per poter essere utilizzata.
+
+I valori della rotazione e guadagno sono inviati al mouse in formato intero (viene eseguito un arrotondamento alla seconda cifra decimale, moltiplicando per 100 il valore). Per questo l'inclinazione potrebbe essere ottenuta in modo impreciso dal mouse. La granularità è di circa 3 gradi.
+
+Avendo la possibilità di poter scegliere singolarmente i parametri da inviare o ricevere, ogni controllo del form è costituito in sostanza da controlli sui valori introdotti/ottenuti, conversioni in Byte e chiamate di una o più Set/Get Feature Report.
