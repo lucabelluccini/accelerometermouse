@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A6E0F52F-4599-4758-B956-9E8420FD28A8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GenericHid</RootNamespace>
+    <AssemblyName>GenericHid</AssemblyName>
+    <StartupObject>GenericHid.TopoTester</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationIcon>gear.ico</ApplicationIcon>
+    <ManifestCertificateThumbprint>DBF87FC547C34FD137A68DEF575CD3BF7F945D36</ManifestCertificateThumbprint>
+    <ManifestKeyFile>TopoTesterProject_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <TargetZone>LocalIntranet</TargetZone>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <SignManifests>true</SignManifests>
+    <PublishUrl>C:\Users\Luca\Desktop\WebSite\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>3.1.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>2</WarningLevel>
+    <BaseAddress>285212672</BaseAddress>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>2</WarningLevel>
+    <BaseAddress>285212672</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Reference Include="AngleAltitudeControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="microsoft.visualbasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TouchscreenKeyboard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Calibrazione.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calibrazione.designer.cs">
+      <DependentUpon>Calibrazione.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugging.cs" />
+    <Compile Include="DebuggingDeclarations.cs" />
+    <Compile Include="DefinesAndConstants.cs" />
+    <Compile Include="DeviceManagement.cs" />
+    <Compile Include="DeviceManagementDeclarations.cs" />
+    <Compile Include="FileIODeclarations.cs" />
+    <Compile Include="KeyboardSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyboardSelector.Designer.cs">
+      <DependentUpon>KeyboardSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KeyboardSetter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyboardSetter.Designer.cs">
+      <DependentUpon>KeyboardSetter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HIDCommunications.cs" />
+    <Compile Include="TopoTester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenericHid.cs" />
+    <Compile Include="Hid.cs" />
+    <Compile Include="HidDeclarations.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Calibrazione.resx">
+      <DependentUpon>Calibrazione.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KeyboardSelector.resx">
+      <DependentUpon>KeyboardSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KeyboardSetter.resx">
+      <DependentUpon>KeyboardSetter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopoTester.resX">
+      <SubType>Designer</SubType>
+      <DependentUpon>TopoTester.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AngleAltitudeControls.dll" />
+    <Content Include="gear.ico" />
+    <Content Include="Resources\231_topo_trappola_1.jpg" />
+    <Content Include="Resources\apply-256.png" />
+    <Content Include="Resources\cancel-256.png" />
+    <Content Include="Resources\madmouse.GIF" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Resources\topo.png" />
+    <Content Include="TouchscreenKeyboard.dll" />
+    <None Include="Resources\topo.gif" />
+    <None Include="Resources\direzioni.png" />
+    <None Include="TopoTesterProject_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+</Project>
