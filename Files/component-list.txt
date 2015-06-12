@@ -1,0 +1,15 @@
+1 Basetta millefori
+1 Connettore USB Type B Femmina
+1 Zoccolo IC 20 pin
+2 Pulsante impulsivo
+1 Led Rosso 3 mm
+1 Quartz 12 MHz
+1 Regolatore di tensione LP2950CZ-3.3
+1 Basetta con Accelerometro 2 assi
+2 Condensatori 22pF
+5 Condensatori 100nF
+2 Condensatori Elettrolitici 10uF
+5 Resistenze 4,7 kO 1/4 W
+1 Resistenza 330 O 1/4 W
+1 Microchip PIC18f14k50 (or compatible)
+1 MEMSIC Mxc62020j
